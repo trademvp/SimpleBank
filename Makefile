@@ -1,7 +1,7 @@
 DB_URL=postgresql://root:123456@localhost:5432/simple_bank02?sslmode=disable
 
 postgres:
-	docker run --name postgres12-02 -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=123456 -d postgres:12-alpine
+	docker run --name postgres12-02 --network bank-network02 -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=123456 -d postgres:12-alpine
 create_db:
 	docker exec -it postgres12-02 createdb --username=root --owner=root simple_bank02
 drop_db:
