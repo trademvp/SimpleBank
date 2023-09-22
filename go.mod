@@ -2,8 +2,6 @@ module simplebank
 
 go 1.21
 
-toolchain go1.21.1
-
 require (
 	github.com/aead/chacha20poly1305 v0.0.0-20201124145622-1a5aba2a8b29
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
