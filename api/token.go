@@ -42,25 +42,25 @@ func (server *Server) renewAccessToken(ctx *gin.Context) {
 	}
 
 	if session.IsBlocked {
-		err := fmt.Errorf("blocked session")
+		err := fmt.Errorf("blocked session(阻塞会话)")
 		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
 		return
 	}
 
 	if session.Username != refreshPayload.Username {
-		err := fmt.Errorf("incorrect session user")
+		err := fmt.Errorf("incorrect session user(错误的会话用户)")
 		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
 		return
 	}
 
 	if session.RefreshToken != req.RefreshToken {
-		err := fmt.Errorf("mismatched session token")
+		err := fmt.Errorf("mismatched session token(不匹配的会话令牌)")
 		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
 		return
 	}
 
 	if time.Now().After(session.ExpiresAt) {
-		err := fmt.Errorf("expired session")
+		err := fmt.Errorf("expired session(会话过期)")
 		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
 		return
 	}

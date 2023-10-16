@@ -20,12 +20,17 @@ func main() {
 	}
 
 	store := db.NewStore(conn)
+	//runGinServer(config, store)
+	runGinServer(config, store)
+}
+
+func runGinServer(config util.Config, store db.Store) {
 	server, err := api.NewServer(config, store)
 	if err != nil {
 		log.Fatal("服务器创建失败:", err)
 	}
 
-	err = server.Start(config.ServerAddress)
+	err = server.Start(config.HTTPServerAddress)
 	if err != nil {
 		log.Fatal("服务器启动失败:", err)
 	}

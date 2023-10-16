@@ -16,6 +16,10 @@ migrate_down:
 	migrate -path db/migration -database "$(DB_URL)" -verbose down
 migrate_down1:
 	migrate -path db/migration -database "$(DB_URL)" -verbose down 1
+db_docs:
+	dbdocs build doc/db.dbml
+db_schema:
+	dbml2sql --postgres -o doc/schema.sql doc/db.dbml
 sqlc:
 	sqlc generate
 test:
@@ -24,4 +28,11 @@ server:
 	go run main.go
 mock:
 	mockgen -package mockdb -destination db/mock/store.go simplebank/db/sqlc Store
-.PHONY: postgres create_db drop_db migrate migrate_up migrate_up1 migrate_down migrate_down1 sqlc test server mock
+proto:
+	rm -f pb/*.go
+	protoc --proto_path=proto --go_out=pb --go_opt=paths=source_relative \
+           --go-grpc_out=pb --go-grpc_opt=paths=source_relative \
+           proto/*.proto
+evans:
+	evans --host localhost --port 9090 -r repl
+.PHONY: postgres create_db drop_db migrate migrate_up migrate_up1 migrate_down migrate_down1 sqlc test server mock proto evans db_docs db_schema

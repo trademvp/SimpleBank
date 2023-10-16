@@ -8,8 +8,8 @@ INSERT INTO sessions (
     is_blocked,
     expires_at
 ) VALUES (
-             $1, $2, $3, $4, $5, $6, $7
-         ) RETURNING *;
+    $1, $2, $3, $4, $5, $6, $7
+) RETURNING *;
 
 -- name: GetSession :one
 SELECT * FROM sessions
