@@ -1,6 +1,6 @@
 -- SQL dump generated using DBML (dbml-lang.org)
 -- Database: PostgreSQL
--- Generated at: 2023-10-16T01:29:36.513Z
+-- Generated at: 2023-10-17T16:43:03.409Z
 
 CREATE TABLE "users" (
   "username" varchar PRIMARY KEY,

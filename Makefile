@@ -1,5 +1,7 @@
 DB_URL=postgresql://root:123456@localhost:5432/simple_bank02?sslmode=disable
 
+network:
+	docker network create bank-network
 postgres:
 	docker run --name postgres12-02 --network bank-network -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=123456 -d postgres:12-alpine
 create_db:
@@ -30,9 +32,19 @@ mock:
 	mockgen -package mockdb -destination db/mock/store.go simplebank/db/sqlc Store
 proto:
 	rm -f pb/*.go
+	statik -src=./doc/swagger -dest=./doc
+	rm -f doc/swagger/*.swagger.json
 	protoc --proto_path=proto --go_out=pb --go_opt=paths=source_relative \
-           --go-grpc_out=pb --go-grpc_opt=paths=source_relative \
-           proto/*.proto
+    --go-grpc_out=pb --go-grpc_opt=paths=source_relative \
+    --grpc-gateway_out=pb --grpc-gateway_opt=paths=source_relative \
+    --openapiv2_out=doc/swagger --openapiv2_opt=allow_merge=true,merge_file_name=simple_bank \
+    proto/*.proto
+
 evans:
 	evans --host localhost --port 9090 -r repl
-.PHONY: postgres create_db drop_db migrate migrate_up migrate_up1 migrate_down migrate_down1 sqlc test server mock proto evans db_docs db_schema
+redis:
+	docker run --name redis -p 6379:6379 -d redis:7-alpine
+redis_ping:
+	docker exec -it redis redis-cli ping
+
+.PHONY: postgres create_db drop_db migrate migrate_up migrate_up1 migrate_down migrate_down1 sqlc test server mock proto evans db_docs db_schema redis redis_ping

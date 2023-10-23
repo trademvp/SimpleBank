@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package pb;
+
+import "google/api/annotations.proto";
+import "rpc_create_user.proto";
+import "rpc_update_user.proto";
+import "rpc_login_user.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "simplebank/pb";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Simple Bank API";
+    version: "1.2";
+    contact: {
+      name: "xuesong4646";
+      url: "https://github.com/xuesong4646";
+      email: "xuesong4646@gmail.com";
+    };
+  };
+};
+
+
+service SimpleBank {
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse){
+    option (google.api.http) = {
+      post: "/v1/create_user"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Use this API to create a new user(使用此API创建新用户)";
+      summary: "Create new user(创建新用户)";
+    };
+  }
+  rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse){
+    option (google.api.http) = {
+      patch: "/v1/update_user"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Use this API to update user(使用此API更新用户)";
+      summary: "Update user(更新用户)";
+    };
+  }
+  rpc LoginUser(LoginUserRequest) returns (LoginUserResponse){
+    option (google.api.http) = {
+      post: "/v1/login_user"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Use this API to login user and get access token & refresh token(使用此API登录用户并获取访问令牌和刷新令牌)";
+      summary: "Login user(登录用户)";
+    };
+  }
+}
